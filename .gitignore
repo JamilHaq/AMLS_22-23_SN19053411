@@ -130,3 +130,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Datasets
+/cartoon_set
+/cartoon_set_test
+/celeba
+/celeba_test

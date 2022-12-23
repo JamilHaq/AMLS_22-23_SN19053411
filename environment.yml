@@ -1,0 +1,17 @@
+name: ml-final
+
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+    - numpy
+    - pandas
+    - matplotlib
+    - scikit-learn
+    - cmake
+    - keras
+    - opencv-python
+    - tensorflow
+  - conda:
+    - dlib
+  
