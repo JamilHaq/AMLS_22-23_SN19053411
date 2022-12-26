@@ -133,7 +133,3 @@ dmypy.json
 
 # Datasets
 Datasets/
-/cartoon_set
-/cartoon_set_test
-/celeba
-/celeba_test

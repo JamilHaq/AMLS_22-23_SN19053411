@@ -9,8 +9,6 @@ import dlib
 global basedir, image_paths, target_size
 
 basedir = './Datasets'
-#images_dir = os.path.join(basedir,'celeba\img')
-#labels_filename = 'celeba\labels.csv'
 detector = dlib.get_frontal_face_detector()
 predictor_path = os.path.join(os.sys.path[0], 'A1\shape_predictor_68_face_landmarks.dat')
 predictor = dlib.shape_predictor(predictor_path)
@@ -123,7 +121,7 @@ def extract_features_labels(data_dir, labels_filename):
         all_labels = []
         
         for img_path in image_paths:
-            file_name= img_path.split('\\')[-1] #change
+            file_name= img_path.split('\\')[-1]
             # load image
             img = image.image_utils.img_to_array(
                 image.image_utils.load_img(img_path,
