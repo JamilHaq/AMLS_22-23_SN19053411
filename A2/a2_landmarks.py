@@ -90,14 +90,15 @@ def run_dlib_shape(image):
 
     return dlibout, resized_image
 
-# function to get the gender from an image
-def gender(line):
+# function to detect if an image is smiling or not
+def smile(line):
     split = line.split('\t')
-    if split[2] == '-1':
+    print(split[3])
+    if split[3] == '-1':
         return -1
     return 1
 
-# function to get the filename of an image
+# function to get an images filename
 def filename(line):
     split = line.split('\t')
     filename = split[1]
@@ -109,7 +110,7 @@ def extract_features_labels(data_filepath, labels_filepath):
     It also extracts the gender label for each image.
     :return:
         landmark_features:  an array containing 68 landmark points for each image in which a face was detected
-        gender_labels:      an array containing the gender label (male=0 and female=1) for each image in
+        smile_labels:      an array containing the smile label (not smiling=0 and smiling=1) for each image in
                             which a face was detected
     """
     i = 0
@@ -118,7 +119,7 @@ def extract_features_labels(data_filepath, labels_filepath):
     target_size = None
     labels_file = open(os.path.join(basedir, labels_filepath), 'r')
     lines = labels_file.readlines()
-    gender_labels = {filename(line) : gender(line) for line in lines[1:]}
+    smile_labels = {filename(line) : smile(line) for line in lines[1:]}
     if os.path.isdir(images_dir):
         all_features = []
         all_labels = []
@@ -133,8 +134,8 @@ def extract_features_labels(data_filepath, labels_filepath):
             features, _ = run_dlib_shape(img)
             if features is not None:
                 all_features.append(features)
-                all_labels.append(gender_labels[file_name])
-                print(file_name, gender_labels[file_name])
+                all_labels.append(smile_labels[file_name])
+                print(file_name, smile_labels[file_name])
                 #LIMITS TO 50 IMAGES FOR TESTING AND SPEED
                 i += 1
             if i == 50:
@@ -142,6 +143,6 @@ def extract_features_labels(data_filepath, labels_filepath):
                 break
 
     landmark_features = np.array(all_features)
-    gender_labels = (np.array(all_labels) + 1)/2 # simply converts the -1 into 0, so male=0 and female=1
+    smile_labels = (np.array(all_labels) + 1)/2 # simply converts the -1 into 0, so not smiling=0 and smiling=1
     #print(landmark_features)
-    return landmark_features, gender_labels
+    return landmark_features, smile_labels
