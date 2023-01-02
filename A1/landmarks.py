@@ -3,6 +3,7 @@ import numpy as np
 from keras.preprocessing import image
 import cv2
 import dlib
+import json
 
 # PATH TO ALL IMAGES
 
@@ -103,7 +104,7 @@ def filename(line):
     filename = split[1]
     return filename
 
-def extract_features_labels(data_filepath, labels_filepath):
+def extract_features_labels(data_filepath, labels_filepath, is_test):
     """
     This funtion extracts the landmarks features for all images in the folder 'dataset/celeba'.
     It also extracts the gender label for each image.
@@ -135,13 +136,27 @@ def extract_features_labels(data_filepath, labels_filepath):
                 all_features.append(features)
                 all_labels.append(gender_labels[file_name])
                 print(file_name, gender_labels[file_name])
-                #LIMITS TO 50 IMAGES FOR TESTING AND SPEED
-                i += 1
-            if i == 50:
-                print('USE 50 IMAGES TO RUN FASTER')
-                break
+            #     #LIMITS TO 50 IMAGES FOR TESTING AND SPEED
+            #     i += 1
+            # if i == 50:
+            #     print('USE 50 IMAGES TO RUN FASTER')
+            #     break
+
+        all_features = [feature.tolist() for feature in all_features]
+        all_labels = [(label + 1)/2 for label in all_labels] # simply converts the -1 into 0, so male=0 and female=1
+
+        data = {'features': all_features, 'labels' : all_labels}
+
+        if is_test == True:
+            data_filename = 'A1/test_data.json'
+        else:
+            data_filename = 'A1/training_data.json'
+
+    output_file = open(data_filename, 'w')
+    json.dump(data, output_file, indent = 3)
+    output_file.close()
 
     landmark_features = np.array(all_features)
-    gender_labels = (np.array(all_labels) + 1)/2 # simply converts the -1 into 0, so male=0 and female=1
+    gender_labels = np.array(all_labels)  #(np.array(all_labels) + 1)/2
     #print(landmark_features)
     return landmark_features, gender_labels
