@@ -136,3 +136,9 @@ cartoon_set/
 cartoon_set_test/
 celeba/
 celeba_test/
+
+# A1 and A2 stored data
+A1\test_data.json
+A1\training_data.json
+A2\test_data.json
+A2\training_data.json

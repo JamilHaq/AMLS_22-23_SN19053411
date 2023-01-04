@@ -58,8 +58,9 @@ def a2_get_data():
 def a2_SVM_selection(training_images, training_labels, test_images, test_labels):
     classifier = svm.SVC()
     param_grid = {'C': [0.1, 1], 
+              'degree': [1, 2, 3, 4, 5],
               'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
-              'kernel': ['linear']}
+              'kernel': ['rbf']}
     grid = GridSearchCV(classifier, param_grid, refit = True, verbose = 3)
     grid.fit(training_images, training_labels)
     print(grid.best_params_)
@@ -69,16 +70,17 @@ def a2_SVM_selection(training_images, training_labels, test_images, test_labels)
     return 
 
 def a2_img_SVM(training_images, training_labels, test_images, test_labels):
-    C = 1.0  # SVM regularization parameter
-    gamma = 0.0001 #Kernel coefficient primarily for ‘rbf’, ‘poly’    
-    classifier = svm.SVC(kernel='poly', degree=3, C=C, gamma=gamma)  #by default the kernel is RBF, kernel='linear', kernel='poly' ,degree=3, svm.LinearSVC()
+    C = 0.1  #SVM regularization parameter
+    deg = 1 #Degree of kernel function, used only for rbf and poly
+    gamma = 0.0001 #Kernel coefficient, used only for rbf   
+    classifier = svm.SVC(kernel='linear', C=C)  #by default the kernel is RBF, kernel='linear', kernel='poly' ,degree=3, svm.LinearSVC()
     # svm.SVC(kernel='linear', C=C),
     # svm.LinearSVC(C=C),
     # svm.SVC(kernel='rbf', gamma=0.7, C=C),
     # svm.SVC(kernel='poly', degree=3, C=C)
     classifier.fit(training_images, training_labels)
     pred = classifier.predict(test_images)
-    #print(pred)
+    print("Classification Report: \n", classification_report(test_labels, pred, zero_division=0))
     print("Accuracy:", accuracy_score(test_labels, pred))
     return pred 
 
