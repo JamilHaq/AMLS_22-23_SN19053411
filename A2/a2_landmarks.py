@@ -91,7 +91,7 @@ def run_dlib_shape(image):
 
     return dlibout, resized_image
 
-# function to detect if an image is smiling or not
+# function to detect if an image is smiling or not where 1 is smiling and -1 is not
 def smile(line):
     split = line.strip('\n').split('\t')
     if split[3] == '-1':

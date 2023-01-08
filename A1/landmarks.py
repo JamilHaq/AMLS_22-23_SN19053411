@@ -91,7 +91,7 @@ def run_dlib_shape(image):
 
     return dlibout, resized_image
 
-# function to get the gender from an image
+# function to get the gender from an image where -1 is female and 1 is male
 def gender(line):
     split = line.split('\t')
     if split[2] == '-1':
@@ -123,7 +123,9 @@ def extract_features_labels(data_filepath, labels_filepath, is_test):
     if os.path.isdir(images_dir):
         all_features = []
         all_labels = []
-        
+        print(image_paths)
+        print(images_dir)
+        print(labels_file)
         for img_path in image_paths:
             file_name= img_path.split('\\')[-1]
             # load image
@@ -136,14 +138,14 @@ def extract_features_labels(data_filepath, labels_filepath, is_test):
                 all_features.append(features)
                 all_labels.append(gender_labels[file_name])
                 print(file_name, gender_labels[file_name])
-            #     #LIMITS TO 50 IMAGES FOR TESTING AND SPEED
-            #     i += 1
-            # if i == 50:
-            #     print('USE 50 IMAGES TO RUN FASTER')
-            #     break
+                #LIMITS TO 10 IMAGES FOR TESTING AND SPEED
+                i += 1
+            if i == 10:
+                print('USE 10 IMAGES TO RUN FASTER')
+                break
 
         all_features = [feature.tolist() for feature in all_features]
-        all_labels = [(label + 1)/2 for label in all_labels] # simply converts the -1 into 0, so male=0 and female=1
+        all_labels = [(label + 1)/2 for label in all_labels] # simply converts the -1 into 0, so female=0 and male=1
 
         data = {'features': all_features, 'labels' : all_labels}
 

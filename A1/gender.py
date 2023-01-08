@@ -9,21 +9,21 @@ import json
 
 def test():
     #Extracts training features from data
-    train_X, train_y = lmarks.extract_features_labels('celeba\img', 'celeba\labels.csv') 
+    train_X, train_y = lmarks.extract_features_labels('celeba\img', 'celeba\labels.csv', 0) 
     #Extracts test features from data
-    test_X, test_y = lmarks.extract_features_labels('celeba_test\img', 'celeba_test\labels.csv') 
-    male = [train_X[i] for i in range(len(train_X)) if train_y[i] == 0]
-    female = [train_X[i] for i in range(len(train_X)) if train_y[i] == 1]
-    x_male = [male[i][0] for i in range (len(male))]
-    x_male2 = [x_male[i][0] for i in range (len(x_male))]
-    y_male = [male[i][1] for i in range (len(male))]
-    y_male2 = [y_male[i][1] for i in range (len(y_male))]
-    print(x_male)
-    print(y_male)
-    print(x_male2)
-    print(y_male2)
-    plt.scatter(x_male, y_male)
-    plt.show()
+    test_X, test_y = lmarks.extract_features_labels('celeba_test\img', 'celeba_test\labels.csv', 1) 
+    # male = [train_X[i] for i in range(len(train_X)) if train_y[i] == 0]
+    # female = [train_X[i] for i in range(len(train_X)) if train_y[i] == 1]
+    # x_male = [male[i][0] for i in range (len(male))]
+    # x_male2 = [x_male[i][0] for i in range (len(x_male))]
+    # y_male = [male[i][1] for i in range (len(male))]
+    # y_male2 = [y_male[i][1] for i in range (len(y_male))]
+    # print(x_male)
+    # print(y_male)
+    # print(x_male2)
+    # print(y_male2)
+    # plt.scatter(x_male, y_male)
+    # plt.show()
     return
 
 #Extracts training and test features from data or file if they exist
@@ -58,8 +58,8 @@ def get_data():
 def SVM_selection(training_images, training_labels, test_images, test_labels):
     classifier = svm.SVC()
     param_grid = {'C': [0.1, 1], 
-              'degree': [1, 2, 3, 4, 5],
-              'gamma': [1, 0.1, 0.01, 0.001, 0.0001],
+              #'degree': [3, 4, 5],
+              'gamma': [0.1, 0.01, 0.001, 0.0001],
               'kernel': ['rbf']}
     grid = GridSearchCV(classifier, param_grid, refit = True, verbose = 3)
     grid.fit(training_images, training_labels)

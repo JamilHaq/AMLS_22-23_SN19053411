@@ -12,6 +12,7 @@ dependencies:
     - keras
     - opencv-python
     - tensorflow
+    - seaborn
   - conda:
     - dlib
   
