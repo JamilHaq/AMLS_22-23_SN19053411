@@ -91,15 +91,32 @@ def run_dlib_shape(image):
 
     return dlibout, resized_image
 
-# function to get the gender from an image where -1 is female and 1 is male
+
 def gender(line):
+    """
+    This function extracts the gender of an image where -1 is female and 1 is male
+
+    Args:
+        line: Line of the label.csv file representing an image
+
+    Return:
+        -1 if the image is female and 1 if it is male
+    """
     split = line.split('\t')
     if split[2] == '-1':
         return -1
     return 1
 
-# function to get the filename of an image
 def filename(line):
+    """
+    This function extracts the file name of an image
+
+    Args:
+        line: Line of the label.csv file representing an image
+
+    Return:
+        filename: Filename of the image
+    """
     split = line.split('\t')
     filename = split[1]
     return filename
@@ -108,7 +125,13 @@ def extract_features_labels(data_filepath, labels_filepath, is_test):
     """
     This funtion extracts the landmarks features for all images in the folder 'dataset/celeba'.
     It also extracts the gender label for each image.
-    :return:
+
+    Args: 
+        data_filepath: String of the imag file path in the Datasets folder
+        labels_filepath: String of the labels file path in the Datasets folder
+        is_test: 0 or 1 value denoting the data as the training or test set
+
+    Return:
         landmark_features:  an array containing 68 landmark points for each image in which a face was detected
         gender_labels:      an array containing the gender label (male=0 and female=1) for each image in
                             which a face was detected

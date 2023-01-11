@@ -91,8 +91,17 @@ def run_dlib_shape(image):
 
     return dlibout, resized_image
 
-# function to detect if an image is smiling or not where 1 is smiling and -1 is not
+
 def smile(line):
+    """
+    This function extracts the smile value of an image where -1 is not smiling and 1 is smiling
+
+    Args:
+        line: Line of the label.csv file representing an image
+
+    Return:
+        1 if the image is smiling and -1 if it is not smiling male
+    """
     split = line.strip('\n').split('\t')
     if split[3] == '-1':
         return -1
@@ -100,15 +109,30 @@ def smile(line):
 
 # function to get an images filename
 def filename(line):
+    """
+    This function extracts the file name of an image
+
+    Args:
+        line: Line of the label.csv file representing an image
+
+    Return:
+        filename: Filename of the image
+    """
     split = line.split('\t')
     filename = split[1]
     return filename
 
 def extract_features_labels(data_filepath, labels_filepath, is_test):
     """
-    This funtion extracts the landmarks features for all images in the folder 'dataset/celeba'.
-    It also extracts the gender label for each image.
-    :return:
+    This funtion extracts the landmarks features for all images in a specified dataset folder.
+    It also extracts the smile label for each image.
+    
+    Args: 
+        data_filepath: String of the imag file path in the Datasets folder
+        labels_filepath: String of the labels file path in the Datasets folder
+        is_test: 0 or 1 value denoting the data as the training or test set
+
+    Return:
         landmark_features:  an array containing 68 landmark points for each image in which a face was detected
         smile_labels:      an array containing the smile label (not smiling=0 and smiling=1) for each image in
                             which a face was detected

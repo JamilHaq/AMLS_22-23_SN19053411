@@ -7,27 +7,15 @@ from matplotlib import pyplot as plt
 import os
 import json
 
-def test():
-    #Extracts training features from data
-    train_X, train_y = lmarks.extract_features_labels('celeba\img', 'celeba\labels.csv', 0) 
-    #Extracts test features from data
-    test_X, test_y = lmarks.extract_features_labels('celeba_test\img', 'celeba_test\labels.csv', 1) 
-    # male = [train_X[i] for i in range(len(train_X)) if train_y[i] == 0]
-    # female = [train_X[i] for i in range(len(train_X)) if train_y[i] == 1]
-    # x_male = [male[i][0] for i in range (len(male))]
-    # x_male2 = [x_male[i][0] for i in range (len(x_male))]
-    # y_male = [male[i][1] for i in range (len(male))]
-    # y_male2 = [y_male[i][1] for i in range (len(y_male))]
-    # print(x_male)
-    # print(y_male)
-    # print(x_male2)
-    # print(y_male2)
-    # plt.scatter(x_male, y_male)
-    # plt.show()
-    return
-
 #Extracts training and test features from data or file if they exist
 def get_data():
+    """
+    This function obtains the test and training data from the celeba datasets
+
+    Return:
+        tr_X, tr_Y: Training data landmark points, training data gender labels
+        te_X, te_Y: Test data landmark point, test data gender labels
+    """
     if not os.path.exists('A1/training_data.json'):
         train_X, train_Y = lmarks.extract_features_labels('celeba\img', 'celeba\labels.csv', is_test = False)
         #train_Y = np.array([y, -(y - 1)]).T  
@@ -56,6 +44,10 @@ def get_data():
 
 #Function to try different C and gamma hyperparameters for SVMs
 def SVM_selection(training_images, training_labels, test_images, test_labels):
+    """
+    This function tests different 
+    
+    """
     classifier = svm.SVC()
     param_grid = {'C': [0.1, 1], 
               #'degree': [3, 4, 5],
