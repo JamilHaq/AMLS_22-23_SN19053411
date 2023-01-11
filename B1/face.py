@@ -1,5 +1,4 @@
 from . import b1_feature_extract as b1_extract
-import pandas as pd
 import numpy as np
 import tensorflow as tf
 import keras
@@ -8,8 +7,13 @@ from keras.optimizers import Adam
 import matplotlib.pyplot as plt
 import seaborn as sn
 
-#Function to plot a graph of training vs test accuracy over multiple epochs
 def accuracy_graph(history):
+    """
+    This function plots a graph of training and testing accuracy over multiple epochs
+
+    Args:
+        history: History of the model being trained over multiple epochs
+    """
     plt.plot(history.history['accuracy'])
     plt.plot(history.history['val_accuracy'])
     plt.xlabel('Epoch')
@@ -17,8 +21,13 @@ def accuracy_graph(history):
     plt.legend(['Training','Validation'])
     plt.show()
 
-#Function to plot a graph of training vs test loss over multiple epochs
 def loss_graph(history):
+    """
+    This function plots a graph of training and testing loss over multiple epochs
+
+    Args:
+        history: History of the model being trained over multiple epochs
+    """
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
     plt.title('Model loss')
@@ -27,8 +36,15 @@ def loss_graph(history):
     plt.legend(['Train', 'Validation'], loc='upper left')
     plt.show()
 
-#Simple neural network function to classify face shape from the cartoon datasets 
+
 def classification():
+    """
+    This is the final function for B1, it extracts the test and traing data from the cartoon dataset,
+    creates a simple neural network with an imput and output layer
+    and trains it on the training set over 20 epochs using the Adam optimizer function with a 0.001 learing rate.
+    A confusion matrix as well as loss and accuracy graphs are also displayed to validate the model.
+
+    """
     #Extract and reshape test and training data for use with the neural network
     train_X, train_Y = b1_extract.extract_features_labels('cartoon_set\img', 'cartoon_set\labels.csv') 
     test_X, test_Y = b1_extract.extract_features_labels('cartoon_set_test\img', 'cartoon_set_test\labels.csv') 
@@ -58,7 +74,6 @@ def classification():
 
     #Set how many epochs to train model for, pass in relevant datasets for training or validation
     history = model.fit(train_X, train_Y, epochs=20, validation_data=(valid_X, valid_Y))
-
     predicted = model.predict(test_X)
     predicted_labels = [np.argmax(i) for i in predicted]
     test_error, test_accuracy = model.evaluate(test_X, test_Y, verbose=1)
@@ -73,83 +88,3 @@ def classification():
     plt.xlabel('Predicted')
     plt.ylabel('Truth')
     plt.show()
-
-
-
-#TESTING OTHER MODELS REMOVE BEFORE SUBMITTING  
-# def b1_get_data():
-#     train_X, train_Y = b1_extract.extract_features_labels('cartoon_set\img', 'cartoon_set\labels.csv') 
-#     test_X, test_Y = b1_extract.extract_features_labels('cartoon_set_test\img', 'cartoon_set_test\labels.csv')
-#     # plt.imshow(train_X[0])
-#     # plt.show()
-#     train_X = train_X.reshape(train_X.shape[0], 500*500) #Flatten the training images
-#     #train_X = train_X/225 #Normalise data
-#     test_X = test_X.reshape(test_X.shape[0], 500*500) #Flatten the test images
-#     #test_X = test_X/225 #Normalise data
-#     test_Y = test_Y.astype(int)
-#     train_Y = train_Y.astype(int)
-#     tr_X = train_X
-#     tr_Y = train_Y
-#     te_X = test_X
-#     te_Y = test_Y
-#     return tr_X, tr_Y, te_X, te_Y
-
-# #Function to one hot encode the lable data
-# def one_hot(y, classes):
-#     # A zero matrix of size (m, c)
-#     y_hot = np.zeros((len(y), classes))
-#     # Putting 1 for column where the given label is, using multidimensional indexing.
-#     y_hot[np.arange(len(y)), y] = 1
-#     return y_hot
-
-# #Softmax calculating function
-# def softmax(z):
-#     # z--> linear part.
-#     # subtracting the max of z for numerical stability.
-#     exp = np.exp(z - np.max(z))
-#     # Calculating softmax for all examples.
-#     for i in range(len(z)):
-#         exp[i] /= np.sum(exp[i])  
-#     return exp
-
-# #Softmax regression training function 
-# def fit(X, Y, learing_rate, classes, epochs):    
-#     m, n = X.shape  # n = number of features, m = number of training examples
-#     # Randomly initializing weights and bias
-#     w = np.random.random((n, classes))
-#     b = np.random.random(classes)
-#     # Empty list to store losses.
-#     losses = []
-    
-#     # Training loop.
-#     for epoch in range(epochs):
-#         # Calculating hypothesis/prediction.
-#         z = X@w + b
-#         print(z)
-#         y_hat = softmax(z)
-#         y_hot = one_hot(Y, classes)# One-hot encoding y
-#         # Calculating the gradient of loss w.r.t w and b.
-#         w_grad = (1/m)*np.dot(X.T, (y_hat - y_hot)) 
-#         b_grad = (1/m)*np.sum(y_hat - y_hot)       
-#         # Updating the parameters.
-#         w = w - learing_rate*w_grad
-#         b = b - learing_rate*b_grad 
-#         # Calculating loss and appending it in the list.
-#         loss = -np.mean(np.log(y_hat[np.arange(len(Y)), Y]))
-#         losses.append(loss)
-#         # Printing out the loss at every 100th iteration.
-#         if epoch%100==0:
-#             print('Epoch {epoch}==> Loss = {loss}'
-#                   .format(epoch=epoch, loss=loss))
-#     return w, b, losses
-
-
-# def predict(X, w, b):
-#     # Predicting
-#     z = X@w + b
-#     y_hat = softmax(z)
-#     #Returns the class with highest probability.
-#     return np.argmax(y_hat, axis=1)
-
-# def accuracy(y, y_hat):
-#     return np.sum(y==y_hat)/len(y)

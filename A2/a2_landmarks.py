@@ -128,7 +128,7 @@ def extract_features_labels(data_filepath, labels_filepath, is_test):
     It also extracts the smile label for each image.
     
     Args: 
-        data_filepath: String of the imag file path in the Datasets folder
+        data_filepath: String of the img file path in the Datasets folder
         labels_filepath: String of the labels file path in the Datasets folder
         is_test: 0 or 1 value denoting the data as the training or test set
 

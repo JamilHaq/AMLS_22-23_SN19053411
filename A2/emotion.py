@@ -7,27 +7,14 @@ from matplotlib import pyplot as plt
 import os
 import json
 
-def a2_test():
-    #Extracts training features from data
-    train_X, train_y = lmarks2.extract_features_labels('celeba\img', 'celeba\labels.csv') 
-    #Extracts test features from data
-    test_X, test_y = lmarks2.extract_features_labels('celeba_test\img', 'celeba_test\labels.csv') 
-    male = [train_X[i] for i in range(len(train_X)) if train_y[i] == 0]
-    female = [train_X[i] for i in range(len(train_X)) if train_y[i] == 1]
-    x_male = [male[i][0] for i in range (len(male))]
-    x_male2 = [x_male[i][0] for i in range (len(x_male))]
-    y_male = [male[i][1] for i in range (len(male))]
-    y_male2 = [y_male[i][1] for i in range (len(y_male))]
-    print(x_male)
-    print(y_male)
-    print(x_male2)
-    print(y_male2)
-    plt.scatter(x_male, y_male)
-    plt.show()
-    return
-
-#Extracts training and test features from data or file if they exist
 def a2_get_data():
+    """
+    This function obtains the test and training data from the celeba datasets
+
+    Return:
+        tr_X, tr_Y: Numpy array of training data landmark points, numpy array of training data smile labels
+        te_X, te_Y: Numpy array of test data landmark point, numpy array of test data smile labels
+    """
     if not os.path.exists('A2/training_data.json'):
         train_X, train_Y = lmarks2.extract_features_labels('celeba\img', 'celeba\labels.csv', is_test = False)
         #train_Y = np.array([y, -(y - 1)]).T  
@@ -54,8 +41,18 @@ def a2_get_data():
     te_Y = test_Y
     return tr_X, tr_Y, te_X, te_Y
 
-#Function to try different C and gamma hyperparameters for SVMs
+
 def a2_SVM_selection(training_images, training_labels, test_images, test_labels):
+    """
+    This function tests different hyperparameters (C, gamma and degree) and kernels for SVMs on the training dataset. 
+    It selects the best paramaters and prints a report of these on the test dataset
+
+    Args:
+        training_images: Numpy array of training data landmark points 
+        training_labels: Numpy array of training data smile labels
+        test_images: Numpy array of test data landmark point
+        test_labels: Numpy array of test data smile labels
+    """
     classifier = svm.SVC()
     param_grid = {'C': [0.1, 1], 
               'degree': [3, 4],
@@ -71,14 +68,24 @@ def a2_SVM_selection(training_images, training_labels, test_images, test_labels)
     return 
 
 def a2_img_SVM(training_images, training_labels, test_images, test_labels):
-    C = 1  #SVM regularization parameter
-    deg = 3 #Degree of kernel function, used only for rbf and poly
+    """
+    This function uses SVM classification with a polynomial kernel to train the model on the training data.
+    C = 0.1, degree = 4
+    It then predicts the smile labels of the test data and prints an calssification report
+
+    Args:
+        training_images: Numpy array of training data landmark points 
+        training_labels: Numpy array of training data smile labels
+        test_images: Numpy array of test data landmark point
+        test_labels: Numpy array of test data smile labels
+
+    Return:
+        pred: Numpy array of predicted smile labels on the test data
+    """
+    C = 0.1  #SVM regularization parameter
+    deg = 4 #Degree of kernel function, used only for rbf and poly
     gamma = 0.0001 #Kernel coefficient, used only for rbf   
-    classifier = svm.SVC(kernel='poly', C=C, degree=deg)  #by default the kernel is RBF, kernel='linear', kernel='poly' ,degree=3, svm.LinearSVC()
-    # svm.SVC(kernel='linear', C=C),
-    # svm.LinearSVC(C=C),
-    # svm.SVC(kernel='rbf', gamma=0.7, C=C),
-    # svm.SVC(kernel='poly', degree=3, C=C)
+    classifier = svm.SVC(kernel='poly', C=C, degree=deg)
     classifier.fit(training_images, training_labels)
     pred = classifier.predict(test_images)
     print("Classification Report: \n", classification_report(test_labels, pred, zero_division=0))
@@ -86,6 +93,10 @@ def a2_img_SVM(training_images, training_labels, test_images, test_labels):
     return pred 
 
 def smile_detect_test():
+    """
+    This function is the final task A2 function to get the test and training data and feed it into the best SVM
+    It prints a classification report for the gender predictions on the test data.
+    """
     tr_X, tr_Y, te_X, te_Y = a2_get_data()
     pred = a2_img_SVM(tr_X, tr_Y, te_X, te_Y)
     print(pred)

@@ -3,7 +3,6 @@ from sklearn.metrics import accuracy_score, classification_report
 from sklearn.model_selection import GridSearchCV
 from sklearn import svm
 import numpy as np
-from matplotlib import pyplot as plt
 import os
 import json
 
@@ -13,8 +12,8 @@ def get_data():
     This function obtains the test and training data from the celeba datasets
 
     Return:
-        tr_X, tr_Y: Training data landmark points, training data gender labels
-        te_X, te_Y: Test data landmark point, test data gender labels
+        tr_X, tr_Y: Numpy array of training data landmark points, numpy array of training data gender labels
+        te_X, te_Y: Numpy array of test data landmark point, numpy array of test data gender labels
     """
     if not os.path.exists('A1/training_data.json'):
         train_X, train_Y = lmarks.extract_features_labels('celeba\img', 'celeba\labels.csv', is_test = False)
@@ -42,17 +41,24 @@ def get_data():
     te_Y = test_Y
     return tr_X, tr_Y, te_X, te_Y
 
-#Function to try different C and gamma hyperparameters for SVMs
+
 def SVM_selection(training_images, training_labels, test_images, test_labels):
     """
-    This function tests different 
-    
+    This function tests different hyperparameters (C, gamma and degree) and kernels for SVMs on the training dataset. 
+    It selects the best paramaters and prints a report of these on the test dataset
+
+    Args:
+        training_images: Numpy array of training data landmark points 
+        training_labels: Numpy array of training data gender labels
+        test_images: Numpy array of test data landmark point
+        test_labels: Numpy array of test data gender labels
     """
     classifier = svm.SVC()
+    #Parameter grid to test across, used degree for poly and gamma for rbf
     param_grid = {'C': [0.1, 1], 
               #'degree': [3, 4, 5],
               'gamma': [0.1, 0.01, 0.001, 0.0001],
-              'kernel': ['rbf']}
+              'kernel': ['poly, rbf, linear']}
     grid = GridSearchCV(classifier, param_grid, refit = True, verbose = 3)
     grid.fit(training_images, training_labels)
     print(grid.best_params_)
@@ -61,13 +67,25 @@ def SVM_selection(training_images, training_labels, test_images, test_labels):
     print(classification_report(test_labels, grid_predictions))
     return 
 
-
-#Uses SVM classification to train the model and then shows the accuracy
 def img_SVM(training_images, training_labels, test_images, test_labels):
-    C = 1.0  #SVM regularization parameter
-    deg = 1 #Degree of kernel function, used only for rbf and poly
+    """
+    This function uses SVM classification with a polynomial kernel to train the model on the training data.
+    C = 0.1, degree = 4
+    It then predicts the gender labels of the test data and prints an calssification report
+
+    Args:
+        training_images: Numpy array of training data landmark points 
+        training_labels: Numpy array of training data gender labels
+        test_images: Numpy array of test data landmark point
+        test_labels: Numpy array of test data gender labels
+
+    Return:
+        pred: Numpy array of predicted gender labels on the test data
+    """
+    C = 0.1  #SVM regularization parameter
+    deg = 4 #Degree of kernel function, used only for rbf and poly
     gamma = 0.0001 #Kernel coefficient, used only for rbf
-    classifier = svm.SVC(kernel='linear', C=C)  #by default the kernel is RBF, kernel='linear', kernel='poly' ,degree=3
+    classifier = svm.SVC(kernel='poly', C=C)
     classifier.fit(training_images, training_labels)
     pred = classifier.predict(test_images)
     #print(pred)
@@ -76,6 +94,10 @@ def img_SVM(training_images, training_labels, test_images, test_labels):
     return pred 
 
 def gender_detect_test():
+    """
+    This function is the final task A1 function to get the test and training data and feed it into the best SVM.
+    It prints a classification report for the gender predictions on the test data.
+    """
     tr_X, tr_Y, te_X, te_Y = get_data()
     pred = img_SVM(tr_X, tr_Y, te_X, te_Y)
     print(pred)
