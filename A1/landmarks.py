@@ -136,7 +136,6 @@ def extract_features_labels(data_filepath, labels_filepath, is_test):
         gender_labels:      An array containing the gender label (male=0 and female=1) for each image in
                             which a face was detected
     """
-    i = 0
     images_dir = os.path.join(basedir, data_filepath)
     image_paths = [os.path.join(images_dir, l) for l in os.listdir(images_dir)]
     target_size = None
@@ -161,11 +160,6 @@ def extract_features_labels(data_filepath, labels_filepath, is_test):
                 all_features.append(features)
                 all_labels.append(gender_labels[file_name])
                 print(file_name, gender_labels[file_name])
-                #LIMITS TO 10 IMAGES FOR TESTING AND SPEED
-                i += 1
-            if i == 10:
-                print('USE 10 IMAGES TO RUN FASTER')
-                break
 
         all_features = [feature.tolist() for feature in all_features]
         all_labels = [(label + 1)/2 for label in all_labels] # simply converts the -1 into 0, so female=0 and male=1

@@ -137,7 +137,6 @@ def extract_features_labels(data_filepath, labels_filepath, is_test):
         smile_labels:      an array containing the smile label (not smiling=0 and smiling=1) for each image in
                             which a face was detected
     """
-    i = 0
     images_dir = os.path.join(basedir, data_filepath)
     image_paths = [os.path.join(images_dir, l) for l in os.listdir(images_dir)]
     target_size = None
@@ -160,11 +159,7 @@ def extract_features_labels(data_filepath, labels_filepath, is_test):
                 all_features.append(features)
                 all_labels.append(smile_labels[file_name])
                 print(file_name, smile_labels[file_name])
-            #     #LIMITS TO 50 IMAGES FOR TESTING AND SPEED
-            #     i += 1
-            # if i == 50:
-            #     print('USE 50 IMAGES TO RUN FASTER')
-            #     break
+
         all_features = [feature.tolist() for feature in all_features]
         all_labels = [(label + 1)/2 for label in all_labels] # simply converts the -1 into 0, so not smiling=0 and smiling=1
 

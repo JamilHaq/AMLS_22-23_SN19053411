@@ -2,10 +2,6 @@ from . import a2_landmarks as lmarks2
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.model_selection import GridSearchCV
 from sklearn import svm
-import numpy as np
-from matplotlib import pyplot as plt
-import os
-import json
 
 def a2_get_data():
     """
@@ -15,25 +11,11 @@ def a2_get_data():
         tr_X, tr_Y: Numpy array of training data landmark points, numpy array of training data smile labels
         te_X, te_Y: Numpy array of test data landmark point, numpy array of test data smile labels
     """
-    if not os.path.exists('A2/training_data.json'):
-        train_X, train_Y = lmarks2.extract_features_labels('celeba\img', 'celeba\labels.csv', is_test = False)
-        #train_Y = np.array([y, -(y - 1)]).T  
-        test_X, test_Y = lmarks2.extract_features_labels('celeba_test\img', 'celeba_test\labels.csv', is_test = True) 
-        #test_Y = np.array([test_y, -(test_y - 1)]).T
+    train_X, train_Y = lmarks2.extract_features_labels('celeba\img', 'celeba\labels.csv', is_test = False)
+    test_X, test_Y = lmarks2.extract_features_labels('celeba_test\img', 'celeba_test\labels.csv', is_test = True) 
 
-    else:
-        train = open('A2/training_data.json')
-        training_data = json.load(train)
-        train_X = np.array(training_data['features'])
-        train_X = train_X.reshape(train_X.shape[0], -1)
-        train_Y = np.array(training_data['labels'])
-        #train_Y = np.array([y, -(y - 1)]).T 
-        test = open('A2/test_data.json')
-        testing_data = json.load(test)
-        test_X = np.array(testing_data['features'])
-        test_X = test_X.reshape(test_X.shape[0], -1)
-        test_Y = np.array(testing_data['labels'])
-        #test_Y = np.array([test_y, -(test_y - 1)]).T
+    train_X = train_X.reshape(train_X.shape[0], -1)
+    test_X = test_X.reshape(test_X.shape[0], -1)
 
     tr_X = train_X
     tr_Y = train_Y

@@ -4,6 +4,7 @@ from keras.preprocessing import image
 
 # PATH TO ALL IMAGES
 global basedir
+
 basedir = './Datasets'
 
 def eye_col(line):
@@ -14,7 +15,7 @@ def eye_col(line):
         line: Line of the label.csv file representing an image
 
     Return:
-        label of 0, 1, 2, 3 or 4 depending on the eye shape
+        label of 0 (brown), 1 (blue), 2 (green), 3 (grey) or 4 (black) depending on the eye colour
     """
     split = line.split('\t')
     if split[1] == '0':
@@ -43,7 +44,7 @@ def filename(line):
     filename = split[3]
     return filename
 
-# Function to get face shape labels and a colour image from the cartoon datasets
+
 def extract_features_labels(data_filepath, labels_filepath):
     """
     This funtion extracts a colour image for all images in a given dataset folder,
@@ -55,30 +56,30 @@ def extract_features_labels(data_filepath, labels_filepath):
 
     Return:
         features: A numpy array containing black and with images of size 500x500x3
-        face_labels: A numpy array containing the eye colour label (0, 1, 2 3 or 4) for each image in
-                     which a face was detected
+        eye_labels: A numpy array containing the eye colour label (0 (brown), 1 (blue), 2 (green), 3 (grey) or 4 (black)) 
+                    for each image in which a face was detected
     """
     images_dir = os.path.join(basedir, data_filepath)
     image_paths = [os.path.join(images_dir, l) for l in os.listdir(images_dir)]
     target_size = None
     labels_file = open(os.path.join(basedir, labels_filepath), 'r')
     lines = labels_file.readlines()
-    face_shape_labels = {filename(line) : eye_col(line) for line in lines[1:]}
+    eye_col_labels = {filename(line) : eye_col(line) for line in lines[1:]}
     if os.path.isdir(images_dir):
         all_features = []
         all_labels = []
         for img_path in image_paths:
             file_name= img_path.split('\\')[-1]
-            # load image
+            # load colour image
             img = image.image_utils.img_to_array(
                 image.image_utils.load_img(img_path,
                                target_size=target_size,
                                interpolation='bicubic')).astype('uint8')
             all_features.append(img)
-            all_labels.append(face_shape_labels[file_name])
-            print(file_name, face_shape_labels[file_name])            
+            all_labels.append(eye_col_labels[file_name])
+            print(file_name, eye_col_labels[file_name])            
 
     features = np.array(all_features)
-    face_labels = np.array(all_labels) 
+    eye_labels = np.array(all_labels) 
     print(features)
-    return features, face_labels
+    return features, eye_labels

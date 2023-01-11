@@ -78,7 +78,7 @@ def classification():
     predicted_labels = [np.argmax(i) for i in predicted]
     test_error, test_accuracy = model.evaluate(test_X, test_Y, verbose=1)
     print('Test error: {}, Test accuracy: {}'.format(test_error, test_accuracy))
-    #Confusion matrix showing correcly predicted face shapes on the test set (ideal is 500 in the diagonal line)
+    #Confusion matrix showing correcly predicted face shapes on the test set (ideal is about 500 in the diagonal line)
     confusion_m = tf.math.confusion_matrix(labels=test_Y, predictions=predicted_labels)
     print(confusion_m)
     accuracy_graph(history)

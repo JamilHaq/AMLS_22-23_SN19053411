@@ -2,11 +2,7 @@ from . import landmarks as lmarks
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.model_selection import GridSearchCV
 from sklearn import svm
-import numpy as np
-import os
-import json
 
-#Extracts training and test features from data or file if they exist
 def get_data():
     """
     This function obtains the test and training data from the celeba datasets
@@ -15,25 +11,11 @@ def get_data():
         tr_X, tr_Y: Numpy array of training data landmark points, numpy array of training data gender labels
         te_X, te_Y: Numpy array of test data landmark point, numpy array of test data gender labels
     """
-    if not os.path.exists('A1/training_data.json'):
-        train_X, train_Y = lmarks.extract_features_labels('celeba\img', 'celeba\labels.csv', is_test = False)
-        #train_Y = np.array([y, -(y - 1)]).T  
-        test_X, test_Y = lmarks.extract_features_labels('celeba_test\img', 'celeba_test\labels.csv', is_test = True) 
-        #test_Y = np.array([test_y, -(test_y - 1)]).T
+    train_X, train_Y = lmarks.extract_features_labels('celeba\img', 'celeba\labels.csv', is_test = False)
+    test_X, test_Y = lmarks.extract_features_labels('celeba_test\img', 'celeba_test\labels.csv', is_test = True) 
 
-    else:
-        train = open('A1/training_data.json')
-        training_data = json.load(train)
-        train_X = np.array(training_data['features'])
-        train_X = train_X.reshape(train_X.shape[0], -1)
-        train_Y = np.array(training_data['labels'])
-        #train_Y = np.array([y, -(y - 1)]).T 
-        test = open('A1/test_data.json')
-        testing_data = json.load(test)
-        test_X = np.array(testing_data['features'])
-        test_X = test_X.reshape(test_X.shape[0], -1)
-        test_Y = np.array(testing_data['labels'])
-        #test_Y = np.array([test_y, -(test_y - 1)]).T
+    train_X = train_X.reshape(train_X.shape[0], -1)
+    test_X = test_X.reshape(test_X.shape[0], -1)
 
     tr_X = train_X
     tr_Y = train_Y
@@ -85,7 +67,7 @@ def img_SVM(training_images, training_labels, test_images, test_labels):
     C = 0.1  #SVM regularization parameter
     deg = 4 #Degree of kernel function, used only for rbf and poly
     gamma = 0.0001 #Kernel coefficient, used only for rbf
-    classifier = svm.SVC(kernel='poly', C=C)
+    classifier = svm.SVC(kernel='poly', C=C, degree=deg)
     classifier.fit(training_images, training_labels)
     pred = classifier.predict(test_images)
     #print(pred)

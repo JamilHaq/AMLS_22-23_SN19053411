@@ -68,19 +68,19 @@ def classification():
     model.add(keras.layers.Dense(5, input_shape=(750000,), activation='softmax',))
 
     #Compile model by selecting ompimizer, learing rate, loss function and success metric
-    classifier = model.compile(optimizer=Adam(lr=0.001),
+    classifier = model.compile(optimizer=Adam(learning_rate=0.001),
                     loss='sparse_categorical_crossentropy',
                     metrics=['accuracy'])
 
     #Set how many epochs to train model for, pass in relevant datasets for training or validation
-    history = model.fit(train_X, train_Y, epochs=15, validation_data=(valid_X, valid_Y))
+    history = model.fit(train_X, train_Y, epochs=20, validation_data=(valid_X, valid_Y))
     accuracy_graph(history)
     loss_graph(history)
     predicted = model.predict(test_X)
     predicted_labels = [np.argmax(i) for i in predicted]
     test_error, test_accuracy = model.evaluate(test_X, test_Y, verbose=1)
     print('Test error: {}, Test accuracy: {}'.format(test_error, test_accuracy))
-    #Confusion matrix showing correcly predicted face shapes on the test set (ideal is 500 in the diagonal line)
+    #Confusion matrix showing correcly predicted face shapes on the test set (ideal is about 500 in the diagonal line)
     confusion_m = tf.math.confusion_matrix(labels=test_Y, predictions=predicted_labels)
     print(predicted[0])
     print(confusion_m)
