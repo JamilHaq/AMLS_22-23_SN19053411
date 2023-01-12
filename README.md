@@ -3,19 +3,19 @@
 ## Initialising the conda environemt
 
 The conda environement can be created/updated using the command below:
-'''
+```
 conda env update --name ml-final --file environment.yml --prune   
-'''
+```
 
 When this process if finished activate the environement with the command:
-'''
+```
 conda activate ml-final  
-'''
+```
 
 ## Folder structure
 
 This Github repository has the folder structure seen below:
-
+```
 ->A1                    # Code for task A1
 ->A2                    # Code for task A2
 ->B1                    # Code for task B1
@@ -25,6 +25,7 @@ This Github repository has the folder structure seen below:
 ->environment.yml       # Conda environment file
 ->main.py               # Main file for running each task
 ->README.md
+```
 
 ### A1
 - gender.py: This file calls the feature extraction functions for this task and trains the model on the training data.
