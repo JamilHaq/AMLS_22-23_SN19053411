@@ -6,7 +6,6 @@ from keras.preprocessing import image
 global basedir
 basedir = './Datasets'
 
-
 def face_shape(line):
     """
     This function extracts the face shape of an image

@@ -122,7 +122,7 @@ def filename(line):
     filename = split[1]
     return filename
 
-def extract_features_labels(data_filepath, labels_filepath, is_test):
+def extract_features_labels(data_filepath, labels_filepath):
     """
     This funtion extracts the landmarks features for all images in a specified dataset folder.
     It also extracts the smile label for each image.
@@ -130,7 +130,6 @@ def extract_features_labels(data_filepath, labels_filepath, is_test):
     Args: 
         data_filepath: String of the img file path in the Datasets folder
         labels_filepath: String of the labels file path in the Datasets folder
-        is_test: 0 or 1 value denoting the data as the training or test set
 
     Return:
         landmark_features:  an array containing 68 landmark points for each image in which a face was detected
@@ -163,19 +162,6 @@ def extract_features_labels(data_filepath, labels_filepath, is_test):
         all_features = [feature.tolist() for feature in all_features]
         all_labels = [(label + 1)/2 for label in all_labels] # simply converts the -1 into 0, so not smiling=0 and smiling=1
 
-        data = {'features': all_features, 'labels' : all_labels}
-
-        if is_test == True:
-            data_filename = 'A2/test_data.json'
-        else:
-            data_filename = 'A2/training_data.json'
-
-    output_file = open(data_filename, 'w')
-    json.dump(data, output_file, indent = 3)
-    output_file.close()
-
-
     landmark_features = np.array(all_features)
-    smile_labels = (all_labels) 
-    #print(landmark_features)
+    smile_labels = (all_labels)
     return landmark_features, smile_labels

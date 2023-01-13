@@ -7,10 +7,10 @@ from B2 import eye as b2
 #a1.gender_detect_test()
 
 #Uncomment to run task A2 solution
-a2.smile_detect_test()
+#a2.smile_detect_test()
 
 #Uncomment to run task B1 solution
 #b1.classification()
 
 #Uncomment to run task B2 solution
-#b2.classification() 
+b2.classification() 

@@ -11,8 +11,8 @@ def a2_get_data():
         tr_X, tr_Y: Numpy array of training data landmark points, numpy array of training data smile labels
         te_X, te_Y: Numpy array of test data landmark point, numpy array of test data smile labels
     """
-    train_X, train_Y = lmarks2.extract_features_labels('celeba\img', 'celeba\labels.csv', is_test = False)
-    test_X, test_Y = lmarks2.extract_features_labels('celeba_test\img', 'celeba_test\labels.csv', is_test = True) 
+    train_X, train_Y = lmarks2.extract_features_labels('celeba\img', 'celeba\labels.csv')
+    test_X, test_Y = lmarks2.extract_features_labels('celeba_test\img', 'celeba_test\labels.csv') 
 
     train_X = train_X.reshape(train_X.shape[0], -1)
     test_X = test_X.reshape(test_X.shape[0], -1)

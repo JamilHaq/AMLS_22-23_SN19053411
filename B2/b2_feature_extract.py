@@ -4,7 +4,6 @@ from keras.preprocessing import image
 
 # PATH TO ALL IMAGES
 global basedir
-
 basedir = './Datasets'
 
 def eye_col(line):
@@ -29,7 +28,6 @@ def eye_col(line):
     else:
         return 4
 
-
 def filename(line):
     """
     This function extracts the file name of an image
@@ -43,7 +41,6 @@ def filename(line):
     split = line.strip('\n').split('\t')
     filename = split[3]
     return filename
-
 
 def extract_features_labels(data_filepath, labels_filepath):
     """

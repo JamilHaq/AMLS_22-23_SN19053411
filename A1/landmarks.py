@@ -121,7 +121,7 @@ def filename(line):
     filename = split[1]
     return filename
 
-def extract_features_labels(data_filepath, labels_filepath, is_test):
+def extract_features_labels(data_filepath, labels_filepath):
     """
     This funtion extracts the landmarks features for all images in a given dataset folder,
     and gender label for each image.
@@ -129,7 +129,6 @@ def extract_features_labels(data_filepath, labels_filepath, is_test):
     Args: 
         data_filepath: String of the img file path in the Datasets folder
         labels_filepath: String of the labels file path in the Datasets folder
-        is_test: 0 or 1 value denoting the data as the training or test set
 
     Return:
         landmark_features:  An array containing 68 landmark points for each image in which a face was detected
@@ -164,18 +163,7 @@ def extract_features_labels(data_filepath, labels_filepath, is_test):
         all_features = [feature.tolist() for feature in all_features]
         all_labels = [(label + 1)/2 for label in all_labels] # simply converts the -1 into 0, so female=0 and male=1
 
-        data = {'features': all_features, 'labels' : all_labels}
-
-        if is_test == True:
-            data_filename = 'A1/test_data.json'
-        else:
-            data_filename = 'A1/training_data.json'
-
-    output_file = open(data_filename, 'w')
-    json.dump(data, output_file, indent = 3)
-    output_file.close()
-
     landmark_features = np.array(all_features)
-    gender_labels = np.array(all_labels)  #(np.array(all_labels) + 1)/2
+    gender_labels = np.array(all_labels)
     #print(landmark_features)
     return landmark_features, gender_labels
